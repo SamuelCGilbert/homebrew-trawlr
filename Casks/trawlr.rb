@@ -12,7 +12,7 @@ cask "trawlr" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :monterey"
+  depends_on macos: :monterey
 
   pkg "trawlr-#{version}-macos.pkg"
 

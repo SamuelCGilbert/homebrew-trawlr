@@ -27,14 +27,14 @@ jobs:
         run: brew install --cask samuelcgilbert/trawlr/trawlr
       - name: The daemon runs and answers
         run: |
-          for i in $(seq 120); do trawlr --status 2>/dev/null | grep -q ready && break; sleep 2; done
+          for _ in $(seq 120); do trawlr --status 2>/dev/null | grep -q ready && break; sleep 2; done
           trawlr --status
           trawlr --limit 3 Trawlr.app
           test -z "$(xattr -p com.apple.quarantine /Applications/Trawlr.app 2>/dev/null)"
       - name: Uninstall
         run: |
           brew uninstall --cask --zap trawlr
-          ! sudo launchctl print system/io.trawlr.trawlrd >/dev/null 2>&1
+          if sudo launchctl print system/io.trawlr.trawlrd >/dev/null 2>&1; then exit 1; fi
           test ! -e /Applications/Trawlr.app
           test ! -e /usr/local/bin/trawlr
           test ! -e "/Library/Application Support/Trawlr"
