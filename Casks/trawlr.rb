@@ -27,12 +27,14 @@ cask "trawlr" do
             pkgutil:      "io.trawlr.Trawlr",
             delete:       "/usr/local/bin/trawlr"
 
-  zap trash: [
-    "/Library/Application Support/Trawlr",
-    "/Library/Logs/Trawlr",
-    "~/Library/LaunchAgents/io.trawlr.Trawlr.plist",
-    "~/Library/Preferences/io.trawlr.trawlr.plist",
-  ]
+  zap delete: [
+        "/Library/Application Support/Trawlr",
+        "/Library/Logs/Trawlr",
+      ],
+      trash:  [
+        "~/Library/LaunchAgents/io.trawlr.Trawlr.plist",
+        "~/Library/Preferences/io.trawlr.trawlr.plist",
+      ]
 
   caveats <<~EOS
     To list Desktop, Documents, Downloads and other private folders, the

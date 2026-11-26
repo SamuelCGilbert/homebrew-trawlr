@@ -21,6 +21,9 @@ jobs:
         run: brew tap samuelcgilbert/trawlr "$GITHUB_WORKSPACE"
       - name: Style and audit
         run: |
+          # Homebrew 6 loads code from other taps only once trusted (installing
+          # by the full name, as the README does, trusts that one cask).
+          if brew commands | grep -qx trust; then brew trust --cask samuelcgilbert/trawlr/trawlr; fi
           brew style samuelcgilbert/trawlr
           brew audit --cask --online samuelcgilbert/trawlr/trawlr
       - name: Install
