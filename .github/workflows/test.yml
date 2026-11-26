@@ -1,0 +1,40 @@
+# Install the cask, check that the daemon runs and answers, then remove it.
+name: Test
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Tap this checkout
+        run: brew tap samuelcgilbert/trawlr "$GITHUB_WORKSPACE"
+      - name: Style and audit
+        run: |
+          brew style samuelcgilbert/trawlr
+          brew audit --cask --online samuelcgilbert/trawlr/trawlr
+      - name: Install
+        run: brew install --cask samuelcgilbert/trawlr/trawlr
+      - name: The daemon runs and answers
+        run: |
+          for i in $(seq 120); do trawlr --status 2>/dev/null | grep -q ready && break; sleep 2; done
+          trawlr --status
+          trawlr --limit 3 Trawlr.app
+          test -z "$(xattr -p com.apple.quarantine /Applications/Trawlr.app 2>/dev/null)"
+      - name: Uninstall
+        run: |
+          brew uninstall --cask --zap trawlr
+          ! sudo launchctl print system/io.trawlr.trawlrd >/dev/null 2>&1
+          test ! -e /Applications/Trawlr.app
+          test ! -e /usr/local/bin/trawlr
+          test ! -e "/Library/Application Support/Trawlr"
