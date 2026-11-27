@@ -1,11 +1,11 @@
 cask "trawlr" do
-  version "0.1.0"
-  sha256 "b84336466aab907f77f24dc4973d2e01fcfd925840e2a1a6c7ea4db2411610c9"
+  version "0.1.1"
+  sha256 "31bfcdcff74f074fd6949191f643e77984618963653644bfb64896a3ec5a3bd7"
 
   url "https://github.com/SamuelCGilbert/trawlr/releases/download/v#{version}/trawlr-#{version}-macos.pkg"
   name "Trawlr"
   desc "Instant file name search with an always-current index"
-  homepage "https://github.com/SamuelCGilbert/trawlr"
+  homepage "https://trawlr.io"
 
   livecheck do
     url :url
